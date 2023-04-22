@@ -16,6 +16,7 @@ class Product extends Model
         'price',
         'category_id',
     ];
+
     protected $hidden = [
         'category_id',
     ];
@@ -24,5 +25,4 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-
 }

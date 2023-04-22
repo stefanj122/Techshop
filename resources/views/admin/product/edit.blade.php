@@ -7,12 +7,18 @@
         <label class="form-label">Name</label>
         <input value="{{ $product->name }}" class="form-control" name="name" />
         <label class="form-label">Description</label>
-        <textarea value="{{ $product->description }}" class="form-control" name="description"></textarea>
+        <textarea class="form-control" name="description">{{ $product->description }}</textarea>
         <label class="form-label">Price</label>
         <input value="{{ $product->price }}" class="form-control" name="price" />
         <label class="form-label">Category id</label>
-        <input value="{{ $product->category->id }}" class="form-control" name="category_id" />
-        <input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Update" />
+        @if ($product->category)
+            <input value="{{ $product->category->id }}" class="form-control" name="category_id" />
+        @else
+            <input class="form-control" name="category_id" />
+        @endif
+        <div class=" text-center">
+            <input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Update" />
+        </div>
     </form>
 @endsection
 
@@ -37,4 +43,19 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('page-title')
+    <div class="pagetitle">
+        <h1>Products</h1>
+        <i class="bi bi-caret-left-fill toggle-right-btn move-right-btn"></i>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                <li class="breadcrumb-item active"><a href="{{ route('product.index') }}">Products</a></li>
+                <li class="breadcrumb-item active"><a class="active"
+                        href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a></li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
 @endsection

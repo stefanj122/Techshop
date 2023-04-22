@@ -42,40 +42,11 @@
 
 <body>
 
-    @include('admin._includes.header')
-    @include('admin._includes.menu')
 
-    <main id="main" class="main">
-
-        @yield('page-title')
-        <section class="section dashboard">
-            @if (session('status'))
-                <div class="alert alert-success">
-                    {{ session('status') }}
-                </div>
-            @endif
-
-            <div class="row">
-
-                <!-- Left side columns -->
-                <div class="main-content col-lg-12 col-lg-8">
-                    @yield('content')
-                </div>
-                <!-- Right side columns -->
-                <div class="side-content col-hiden">
-                    @yield('sidebar')
-                </div><!-- End Recent Activity -->
-
-
-            </div><!-- End Right side columns -->
-        </section>
-
+    <main>
+        @yield('content')
     </main><!-- End #main -->
 
-    @include('admin._includes.footer')
-
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
