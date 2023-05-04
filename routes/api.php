@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::get('/', [\App\Http\Controllers\ProductController::class, 'getProducts']);
+Route::middleware('auth:sanctum')->get(
+    '/user', function (Request $request) {
+        return $request->user();
+    }
+);
+Route::get('/', [ProductController::class, 'getProducts']);
 Route::post('/admin/product-category', [ProductController::class, 'create']);

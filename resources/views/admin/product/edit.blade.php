@@ -6,15 +6,42 @@
         @method('PUT')
         <label class="form-label">Name</label>
         <input value="{{ $product->name }}" class="form-control" name="name" />
+        @error('name')
+            <div class="alert mt-2 alert-danger text-center alert-dismissible fade show">{{ $message }}</div>
+        @enderror
         <label class="form-label">Description</label>
         <textarea class="form-control" name="description">{{ $product->description }}</textarea>
+        @error('description')
+            <div class="alert mt-2 alert-danger text-center alert-dismissible fade show">{{ $message }}</div>
+        @enderror
+
         <label class="form-label">Price</label>
         <input value="{{ $product->price }}" class="form-control" name="price" />
-        <label class="form-label">Category id</label>
+        @error('price')
+            <div class="alert mt-2 alert-dismissible fade show alert-danger text-center">{{ $message }}</div>
+        @enderror
+        <label class="form-label">Category</label>
         @if ($product->category)
-            <input value="{{ $product->category->id }}" class="form-control" name="category_id" />
+            <select class="form-select" name="category_id" aria-label="Default select example">
+                <option value="{{ $product->category->id }}" selected>{{ $product->category->name }}</option>
+                @foreach ($categories as $category)
+                    @if ($category->id !== $product->category->id)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endif
+                @endforeach
+            </select>
+            @error('category_id')
+                <div class="alert mt-2 alert-danger text-center alert-dismissible fade show">{{ $message }}</div>
+            @enderror
         @else
-            <input class="form-control" name="category_id" />
+            <select class="form-select" name="category_id" aria-label="Default select example">
+                <option value="0" selected>Select category</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+                @error('category_id')
+                    <div class="alert alert-dismissible fade show mt-2 alert-danger text-center">{{ $message }}</div>
+                @enderror
         @endif
         <div class=" text-center">
             <input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Update" />
@@ -23,7 +50,7 @@
 @endsection
 
 @section('sidebar')
-    <div class="card" style="width: 15rem;">
+    <div class="card side-card">
         <div class="card-body">
             <h5 class="card-title">{{ $product->name }}</h5>
             @if ($product->category)

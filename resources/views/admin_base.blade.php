@@ -49,13 +49,13 @@
 
         @yield('page-title')
         <section class="section dashboard">
-            @if (session('status'))
+            @if (session()->has('status'))
                 <div class="alert alert-success">
                     {{ session('status') }}
                 </div>
             @endif
 
-            <div class="row">
+            <div class="justify-content-left row">
 
                 <!-- Left side columns -->
                 <div class="main-content col-lg-12 col-lg-8">
@@ -69,7 +69,6 @@
 
             </div><!-- End Right side columns -->
         </section>
-
     </main><!-- End #main -->
 
     @include('admin._includes.footer')

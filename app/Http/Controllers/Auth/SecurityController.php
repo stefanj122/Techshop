@@ -28,7 +28,7 @@ class SecurityController extends Controller
     {
         request()->validate(
             ['username' => 'required|unique:users',
-            'email'=> 'email|required',
+            'email'=> 'email|required|unique:users',
             'firstName' => 'required|min:2',
             'lastName' => 'required|min:2',
             'password'=> 'required|min:4',
@@ -46,14 +46,16 @@ class SecurityController extends Controller
 
     public function authenticate(): RedirectResponse
     {
+        $fieldType = filter_var(request()->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $credentials = [
-        'username' => request()->username,
+        $fieldType => request()->username,
         'password' => request()->password,
         ];
-        if(Auth::attempt($credentials)) {
-            return redirect()->route('home');
+        request()->flashExcept('password');
+        if(Auth::attempt($credentials, request()->remember)) {
+            return redirect()->route('home')->withInput();
         }else{
-            return redirect()->route('auth.login')->withErrors(['login'=>"Incorrect username or password"]);
+            return back()->withErrors(['login'=>"Incorrect username or password"]);
         };
     }
 

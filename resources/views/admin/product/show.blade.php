@@ -7,6 +7,7 @@
         <div class="card-body">
             <h5 class="card-title">{{ $product->name }}</h5>
             <p class="card-text">{{ $product->description }}</p>
+            <h5 class="card-title">{{ $product->price }} KM</h5>
         </div>
         <div class="card-footer text-muted">
             {{ $product->updated_at }}
@@ -23,15 +24,19 @@
 @endsection
 
 @section('sidebar')
-    <h6>Created:{{ $product->created_at }}</h6>
-    <h6>Updated:{{ $product->updated_at }}</h6>
-    @if ($product->category)
-        <a class="link-dark" href="{{ route('productCategory.show', $product->category->id) }}">
-            <h6>Category:{{ $product->category->name }}</h6>
-        </a>
-    @else
-        <h6>Category:No category</h6>
-    @endif
+    <div class="card side-card">
+        <div class="card-body">
+            <h3 class="card-text mt-4">Created:{{ $product->created_at }}</h3>
+            <h3 class="card-text mt-4">Updated:{{ $product->updated_at }}</h3>
+            @if ($product->category)
+                <a class="link-dark" href="{{ route('productCategory.show', $product->category->id) }}">
+                    <h3 class="card-text mt-4">Category:{{ $product->category->name }}</h3>
+                </a>
+            @else
+                <h3 class="card-text mt-4">Category:No category</h3>
+            @endif
+        </div>
+    </div>
 @endsection
 
 @section('page-title')

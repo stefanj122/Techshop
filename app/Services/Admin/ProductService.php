@@ -13,10 +13,17 @@ class ProductService
     public function index(): View|Factory
     {
         $products = Product::query()
-            ->where('name', 'like', '%'.request()->search.'%')
-            ->paginate(request()->perPage);
-
-        return view('admin.product.index', ['products' => $products]);
+            ->where('name', 'like', '%'.request()->search.'%');
+        $products = request()->lowPrice ? $products->where('price', '>', request()->lowPrice): $products;
+        $products = request()->highPrice ? $products->where('price', '<', request()->highPrice): $products;
+        $products = request()->category ? $products->where('category_id', '=', request()->category) : $products;
+        if(request()->sortBy) {
+            $sortBy = explode(':', request()->sortBy);
+            $products = $products->orderBy($sortBy[0], $sortBy[1]);
+        }
+        $products= $products->paginate(request()->perPage);
+        $categories = Category::query()->get();
+        return view('admin.product.index', ['products' => $products, 'categories' => $categories]);
     }
 
     public function store(): RedirectResponse
@@ -28,7 +35,6 @@ class ProductService
                 'categoryId' => 'integer|nullable',
                  ]
             );
-
         $product = new Product;
         $product->name = request()->name;
         $product->description = request()->description;
@@ -37,7 +43,7 @@ class ProductService
         $product->category()->associate($category);
         $product->save();
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.images.upload', $product->id);
     }
 
     public function show(string $id): RedirectResponse|View|Factory
@@ -84,7 +90,8 @@ class ProductService
         if(!$product) {
             return redirect()->route('product.index');
         }
-        return view('admin.product.edit', ['product' => $product]);
+        $categories = Category::query()->get();
+        return view('admin.product.edit', ['product' => $product, 'categories'=>$categories]);
     }
 
     public function create(): View|Factory

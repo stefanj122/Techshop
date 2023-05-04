@@ -25,10 +25,15 @@
             Add category
         </a>
     </div>
+    @include('admin._includes.pagination', ['data' => $categories])
 @endsection
 
 @section('sidebar')
-    <h3>Total categories: {{ $categories->total() }}</h3>
+    <div class="card side-card">
+        <div class="card-body">
+            <h3 class="card-title">Total categories: {{ $categories->total() }}</h3>
+        </div>
+    </div>
 @endsection
 
 @section('page-title')

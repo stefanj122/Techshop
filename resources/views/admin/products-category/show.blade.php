@@ -23,8 +23,12 @@
 @endsection
 
 @section('sidebar')
-    <h6>Created:{{ $category->created_at }}</h6>
-    <h6>Updated:{{ $category->updated_at }}</h6>
+    <div class="card side-card">
+        <div class="card-body">
+            <h3 class="card-title">Created:{{ $category->created_at }}</h3>
+            <h3 class="card-title">Updated:{{ $category->updated_at }}</h3>
+        </div>
+    </div>
 @endsection
 
 @section('page-title')

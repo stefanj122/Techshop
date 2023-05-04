@@ -6,8 +6,14 @@
         @method('PUT')
         <label class="form-label">Name</label>
         <input value="{{ $category->name }}" class="form-control" name="name" />
+        @error('name')
+            <div class="alert mt-2 alert-danger alert-dismissible fade show text-center">{{ $message }}</div>
+        @enderror
         <label class="form-label">Description</label>
         <textarea class="form-control" name="description">{{ $category->description }}</textarea>
+        @error('description')
+            <div class="alert mt-2 alert-danger alert-dismissible fade show text-center">{{ $message }}</div>
+        @enderror
         <div class=" text-center">
             <input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Update" />
         </div>

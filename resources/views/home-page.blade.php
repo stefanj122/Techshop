@@ -15,5 +15,49 @@
     @endif
 @endsection
 @section('content')
-    <h1>Thanks for wisiting my website!!!</h1>
+    <div class="container horizontal-scrollable">
+        <a href="{{ route('product.index') }}">
+            <h1>Products:</h1>
+        </a>
+        <div class='row flex-nowrap text-center' name="horizontal-scrollable">
+            @foreach ($products as $product)
+                <div class="col-lg-4">
+                    <div class="card" style="height: 90%;">
+                        <a href="{{ route('product.show', $product->id) }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                @if ($product->category)
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ $product->category->name }}</h6>
+                                @else
+                                    <h6 class="card-subtitle mb-2 text-muted">No category</h6>
+                                @endif
+                                <h5 class="card-title">{{ $product->price }} KM</h5>
+                                <p class="card-text">{{ $product->description ? $product->description : 'No description' }}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        <a href="{{ route('productCategory.index') }}">
+            <h1>Categories:</h1>
+        </a>
+        <div class='row flex-nowrap text-center' name="horizontal-scrollable">
+            @foreach ($categories as $category)
+                <div class="col-lg-4">
+                    <div class="card" style="height: 90%;">
+                        <a href="{{ route('productCategory.show', $category->id) }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $category->name }}</h5>
+                                <p class="card-text">
+                                    {{ $category->description ? $category->description : 'No description' }}
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
 @endsection

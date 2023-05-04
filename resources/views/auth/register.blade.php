@@ -10,7 +10,7 @@
 
                         <div class="d-flex justify-content-center py-4">
                             <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                <img src="assets/img/logo.png" alt="">
+                                <img src="{{ asset('assets/img/logo.png') }}" alt="">
                                 <span class="d-none d-lg-block">Techshop</span>
                             </a>
                         </div><!-- End Logo -->
@@ -29,7 +29,8 @@
                                     @csrf
                                     <div class="col-12">
                                         <label for="firstName" class="form-label">First Name</label>
-                                        <input type="text" name="firstName" class="form-control" id="firstName" required>
+                                        <input value="{{ old('firstName') }}" type="text" name="firstName"
+                                            class="form-control" id="firstName" required>
                                         <div class="invalid-feedback">Please, enter your name!</div>
                                         @error('firstName')
                                             <div class="alert alert-danger text-center">{{ $message }}</div>
@@ -37,7 +38,8 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input type="text" name="lastName" class="form-control" id="lastName" required>
+                                        <input value="{{ old('lastName') }}" type="text" name="lastName"
+                                            class="form-control" id="lastName" required>
                                         <div class="invalid-feedback">Please, enter your name!</div>
                                         @error('lastName')
                                             <div class="alert alert-danger text-center">{{ $message }}</div>
@@ -47,7 +49,7 @@
 
                                     <div class="col-12">
                                         <label for="yourEmail" class="form-label">Your Email</label>
-                                        <input type="email" name="email"
+                                        <input value="{{ old('email') }}" type="email" name="email"
                                             class="form-control @error('username') is-ivalid @enderror" id="yourEmail"
                                             required>
                                         <div class="invalid-feedback">Please enter a valid Email adddress!</div>
@@ -61,8 +63,8 @@
                                         <label for="yourUsername" class="form-label">Username</label>
                                         <div class="input-group has-validation">
                                             <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                            <input type="text" name="username" class="form-control" id="yourUsername"
-                                                required>
+                                            <input value="{{ old('username') }}" type="text" name="username"
+                                                class="form-control" id="yourUsername" required>
                                             <div class="invalid-feedback">Please choose a username.</div>
                                         </div>
                                         @error('username')
@@ -72,8 +74,8 @@
 
                                     <div class="col-12">
                                         <label for="yourPassword" class="form-label">Password</label>
-                                        <input type="password" name="password" class="form-control" id="yourPassword"
-                                            required>
+                                        <input value="{{ old('password') }}" type="password" name="password"
+                                            class="form-control" id="yourPassword" required>
                                         <div class="invalid-feedback">Please enter your password!</div>
                                         @error('password')
                                             <div class="alert alert-danger text-center">{{ $message }}</div>
@@ -83,8 +85,8 @@
 
                                     <div class="col-12">
                                         <div class="form-check">
-                                            <input class="form-check-input" name="terms" type="checkbox" value=""
-                                                id="acceptTerms" required>
+                                            <input value="{{ old('terms') }}" class="form-check-input" name="terms"
+                                                type="checkbox" value="" id="acceptTerms" required>
                                             <label class="form-check-label" for="acceptTerms">I agree and accept the <a
                                                     href="#">terms and conditions</a></label>
                                             <div class="invalid-feedback">You must agree before submitting.</div>

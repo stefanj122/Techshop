@@ -10,7 +10,7 @@
     </div><!-- End Logo -->
 
     <div class="search-bar">
-        <form class="search-form d-flex align-items-center" method="GET" action="{{ url()->current() }}">
+        <form class="search-form d-flex align-items-center" method="GET" action="{{ request()->fullUrl() }}">
             <input type="text" name="search" placeholder="Search" title="Enter search keyword">
             <button type="submit" title="Search"><i class="bi bi-search"></i></button>
         </form>
@@ -169,7 +169,8 @@
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
+                    <img src="{{ asset('storage/images/avatars/' . Auth::user()->avatar) }}" alt="Profile"
+                        class="rounded-circle">
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->firstName }}
                         {{ Auth::user()->lastName }}</span>
                 </a><!-- End Profile Iamge Icon -->
@@ -184,7 +185,8 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                        <a class="dropdown-item d-flex align-items-center"
+                            href="{{ route('user.show', Auth::user()->id) }}">
                             <i class="bi bi-person"></i>
                             <span>My Profile</span>
                         </a>

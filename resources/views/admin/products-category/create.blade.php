@@ -4,14 +4,14 @@
     <form class="form-control" method="POST" action="{{ route('productCategory.store') }}">
         @csrf
         <label class="form-label" for="name">Name</label>
-        <input class="form-control" id="name" name="name" />
+        <input value="{{ old('name') }}" class="form-control" id="name" name="name" />
         @error('name')
-            <div class="alert alert-danger">{{ $message }}</div>
+            <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
         <label class="form-label" for="description">Description</label>
-        <textarea class="form-control" id="description" name="description"></textarea>
+        <textarea class="form-control" id="description" name="description"> {{ old('email') }}</textarea>
         @error('description')
-            <div class="alert alert-danger">{{ $message }}</div>
+            <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
         <div class=" text-center">
             <input class="btn btn-primary mt-4" type="submit" value="Save" />
