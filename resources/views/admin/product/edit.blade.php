@@ -44,7 +44,8 @@
                 @enderror
         @endif
         <div class=" text-center">
-            <input class="btn btn-primary" style="margin-top: 10px;" type="submit" value="Update" />
+            <input class="btn btn-primary mt-2" type="submit" value="Update" />
+            <a class="btn btn-success mt-2" href="{{ route('product.images.edit', $product->id) }}">Change images</a>
         </div>
     </form>
 @endsection

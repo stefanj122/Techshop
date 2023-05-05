@@ -3,9 +3,16 @@
     <div class="container text-center" id=test>
         <div class="row row-cols-2">
             @foreach ($products as $product)
-                <div class="col">
-                    <div class="card" style="height: 90%;">
-                        <a href="{{ route('product.show', $product->id) }}">
+                <div class="col mt-4">
+                    <a href="{{ route('product.show', $product->id) }}">
+                        <div class="card h-100">
+                            @foreach ($product->productImages as $image)
+                                @if ($loop->first)
+                                    <img src="{{ asset('storage/product/images/' . $image->name) }}"
+                                        class="card-img-top img-thumbnail w-75 mx-auto mt-2" alt="..."
+                                        style="max-height: 200px">
+                                @endif
+                            @endforeach
                             <div class="card-body">
                                 <h3 class="card-title">{{ $product->name }}</h3>
                                 @if ($product->category)
@@ -14,16 +21,17 @@
                                     <h6 class="card-subtitle mb-2 text-muted">No category</h6>
                                 @endif
                                 <h5 class="card-title">{{ $product->price }} KM</h5>
-                                <p class="card-text">{{ $product->description ? $product->description : 'No description' }}
+                                <p class="card-text">
+                                    {{ $product->description ? $product->description : 'No description' }}
                                 </p>
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             @endforeach
         </div>
     </div>
-    <div class="container text-center">
+    <div class="container text-center mt-4">
         <a class="btn btn-primary" href="{{ route('product.create') }}">
             Add product
         </a>

@@ -35,7 +35,7 @@
 }
 .side-card {
     width: 100%;
-    background: rgba(100, 100, 100, 0.5);
+    background: rgba(150, 150, 150, 1);
 }
 @media (max-width: 1200px) {
     .col-left {
@@ -44,11 +44,13 @@
     .side-content {
         right: -3%;
         min-width: 300px;
+        z-index: 9;
     }
     .col-hiden {
         right: -100%;
     }
     .toggle-right-btn {
+        z-index: 9;
         right: 270px;
     }
     .move-right-btn {

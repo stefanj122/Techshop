@@ -94,6 +94,27 @@ import axios from "axios";
         imageInput.addEventListener("change", loadFile);
     }
 
+    const uploadContainer = document.getElementById("uploadContainer");
+    const imageUpload = document.getElementById("inputGroupFile02");
+    function loadFile(e) {
+        for (const image of e.target.files) {
+            const imageTag = document.createElement("img");
+            imageTag.src = URL.createObjectURL(image);
+            imageTag.width = 400;
+            imageTag.className = "mx-2 img-thumbnail";
+            uploadContainer.appendChild(imageTag);
+        }
+    }
+    if (imageUpload) {
+        imageUpload.addEventListener("change", loadFile);
+    }
+
+    const myCarousel = document.getElementById("myCarousel");
+    myCarousel.carousel({
+        interval: 4000,
+        wrap: true,
+        keyboard: true,
+    });
     //    const items = document.getElementsByName("horizontal-scrollable");
     //    const horizontalScroll = (e) => {
     //        if (e.deltaY > 0) {

@@ -64,7 +64,9 @@ Route::group(
                 Route::prefix('/admin/images/product')->group(
                     function () {
                         Route::get('/{id}/upload', 'upload')->name('product.images.upload');
+                        Route::get('/{id}/edit', 'edit')->name('product.images.edit');
                         Route::post('/{id}/store', 'store')->name('product.images.store');
+                        Route::delete('/{id}', 'delete')->name('product.images.delete');
                     }
                 );
             }
