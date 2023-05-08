@@ -84,3 +84,44 @@
 ::-webkit-scrollbar-thumb:hover {
     background-color: #a8bbbf;
 }
+
+.index-images {
+    float: left;
+    object-fit: contain;
+}
+.modal-img {
+    max-height: 1000px;
+    object-fit: contain;
+}
+
+.product-images {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+}
+
+.product-images .delete-btn {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    text-align: center;
+    cursor: pointer;
+}
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: red;
+}
+
+.product-images .isdefault-btn {
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    text-align: center;
+    cursor: pointer;
+}
+.isdefault-btn {
+    background: transparent;
+    border: none;
+    color: red;
+}

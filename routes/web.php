@@ -67,6 +67,7 @@ Route::group(
                         Route::get('/{id}/edit', 'edit')->name('product.images.edit');
                         Route::post('/{id}/store', 'store')->name('product.images.store');
                         Route::delete('/{id}', 'delete')->name('product.images.delete');
+                        Route::put('/{id}/update', 'update')->name('product.images.update');
                     }
                 );
             }

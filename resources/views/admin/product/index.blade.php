@@ -7,9 +7,9 @@
                     <a href="{{ route('product.show', $product->id) }}">
                         <div class="card h-100">
                             @foreach ($product->productImages as $image)
-                                @if ($loop->first)
+                                @if ($image->isDefault == true)
                                     <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                        class="card-img-top img-thumbnail w-75 mx-auto mt-2" alt="..."
+                                        class="card-img-top  w-75 mx-auto mt-2 index-images" alt="..."
                                         style="max-height: 200px">
                                 @endif
                             @endforeach

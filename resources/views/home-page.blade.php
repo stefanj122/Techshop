@@ -21,9 +21,16 @@
         </a>
         <div class='row flex-nowrap text-center' name="horizontal-scrollable">
             @foreach ($products as $product)
-                <div class="col-lg-4">
-                    <div class="card" style="height: 90%;">
+                <div class="col-lg-6">
+                    <div class="card h-100">
                         <a href="{{ route('product.show', $product->id) }}">
+                            @foreach ($product->productImages as $image)
+                                @if ($image->isDefault == true)
+                                    <img src="{{ asset('storage/product/images/' . $image->name) }}"
+                                        class="card-img-top img-thumbnail w-50 mx-auto mt-2" alt="..."
+                                        style="max-height: 150px" id="index-images">
+                                @endif
+                            @endforeach
                             <div class="card-body">
                                 <h5 class="card-title">{{ $product->name }}</h5>
                                 @if ($product->category)

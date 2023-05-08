@@ -14,6 +14,7 @@ class ProductImages extends Model
     protected $fillable = [
         'name',
         'product_id',
+        'isDefault',
     ];
 
     protected $hidden = [

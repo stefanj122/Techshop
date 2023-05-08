@@ -96,25 +96,124 @@ import axios from "axios";
 
     const uploadContainer = document.getElementById("uploadContainer");
     const imageUpload = document.getElementById("inputGroupFile02");
-    function loadFile(e) {
-        for (const image of e.target.files) {
+    function loadFiles(e) {
+        for (const [index, image] of Object.entries(e.target.files)) {
             const imageTag = document.createElement("img");
+            const div = document.createElement("div");
+            const input = document.createElement("input");
+            div.classList.add("col-lg-4");
+            div.classList.add("product-images");
             imageTag.src = URL.createObjectURL(image);
             imageTag.width = 400;
             imageTag.className = "mx-2 img-thumbnail";
-            uploadContainer.appendChild(imageTag);
+            input.classList.add("isdefault-btn");
+            input.type = "radio";
+            // input.name = `isDefaultRadio`;
+            input.id = "default";
+            input.addEventListener("click", (e) => {
+                const allInputs =
+                    document.getElementsByClassName("isdefault-btn");
+                for (const radio of allInputs) {
+                    radio.checked = false;
+                }
+                e.target.checked = true;
+                document.getElementById("isDefault").value = `{"id": ${index}}`;
+            });
+            div.appendChild(imageTag);
+            div.appendChild(input);
+            uploadContainer.appendChild(div);
         }
     }
     if (imageUpload) {
-        imageUpload.addEventListener("change", loadFile);
+        imageUpload.addEventListener("change", loadFiles);
+    }
+    const isDefaultInput = document.getElementsByClassName("isdefault-btn");
+    if (isDefaultInput) {
+        for (const input of isDefaultInput) {
+            input.addEventListener("click", (e) => {
+                const allInputs =
+                    document.getElementsByClassName("isdefault-btn");
+                for (const radio of allInputs) {
+                    radio.checked = false;
+                }
+                e.target.checked = true;
+                document.getElementById("isDefault").value = e.target.value;
+            });
+        }
     }
 
-    const myCarousel = document.getElementById("myCarousel");
-    myCarousel.carousel({
-        interval: 4000,
-        wrap: true,
-        keyboard: true,
-    });
+    /* const myCarousel = document.getElementById("myCarousel");
+    if (myCarousel) {
+        myCarousel.carousel({
+            interval: 4000,
+            wrap: true,
+            keyboard: true,
+        });
+    } */
+
+    const inputCategory = document.getElementById("input-category");
+    const listCategory = document.getElementById("list-category");
+    async function fetchCategories(value) {
+        if (value.length > 1) {
+            const response = await axios.get(
+                "http://localhost:8001/api/admin/product-category/search?search=" +
+                    value,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            response.data.forEach((category) => {
+                let listItem = document.createElement("li");
+                listItem.classList.add("list-group-item");
+                listItem.style.cursor = "pointer";
+                listItem.addEventListener("mouseenter", function (e) {
+                    this.classList.add("active");
+                });
+                listItem.addEventListener("mouseleave", function () {
+                    this.classList.remove("active");
+                });
+                listItem.addEventListener("click", function () {
+                    displayNames(category);
+                });
+                let word =
+                    "<b>" +
+                    category.name.substr(0, inputCategory.value.length) +
+                    "</b>";
+                word += category.name.substr(inputCategory.value.length);
+                //display the value in array
+                listItem.innerHTML = word;
+                listCategory.appendChild(listItem);
+                if (value.toLowerCase() === category.name.toLowerCase()) {
+                    document.getElementById("input-category-hiden").value =
+                        category.id;
+                }
+            });
+        }
+    }
+    function displayNames(value) {
+        inputCategory.value = value.name;
+        document.getElementById("input-category-hiden").value = value.id;
+        removeElements();
+    }
+    function removeElements() {
+        let items = document.querySelectorAll(".list-group-item");
+        items.forEach((item) => {
+            item.remove();
+        });
+    }
+    if (inputCategory) {
+        let timer;
+        inputCategory.addEventListener("keyup", function () {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                removeElements();
+                fetchCategories(this.value);
+            }, 500);
+        });
+    }
+
     //    const items = document.getElementsByName("horizontal-scrollable");
     //    const horizontalScroll = (e) => {
     //        if (e.deltaY > 0) {

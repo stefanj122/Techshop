@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Admin\ProductCategoryService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\MessageBag;
 
@@ -51,5 +52,10 @@ class ProductCategoryController extends Controller
     public function edit(string $id): RedirectResponse|View|Factory
     {
         return $this->productCategoryService->edit($id);
+    }
+
+    public function search(): Collection|array
+    {
+        return $this->productCategoryService->search();
     }
 }

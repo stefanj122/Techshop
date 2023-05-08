@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Models\Product\Category;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\MessageBag;
 
@@ -68,5 +69,11 @@ class ProductCategoryService
             return redirect()->route('productCategory.index');
         }
         return view('admin.products-category.edit', ['category' => $category]);
+    }
+
+    public function search(): Collection|array
+    {
+        $categories = Category::query()->where('name', 'LIKE', "%" . request()->search . "%")->get();
+        return $categories;
     }
 }

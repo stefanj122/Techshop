@@ -66,12 +66,12 @@
                                 @if ($loop->first)
                                     <div class="carousel-item active">
                                         <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                            class="d-block w-100 " alt="...">
+                                            class="d-block mx-auto w-100 modal-img" alt="...">
                                     </div>
                                 @else
                                     <div class="carousel-item">
                                         <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                            class="d-block w-100 " alt="...">
+                                            class="d-block mx-auto w-100 modal-img" alt="...">
                                     </div>
                                 @endif
                             @endforeach

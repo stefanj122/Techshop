@@ -26,15 +26,56 @@ class ProductImagesController extends Controller
 
     public function store(string $id): RedirectResponse
     {
+        if(!request()->isDefault) {
+            $isDefault = json_decode('{"id":0}');
+        }else{
+            $isDefault = json_decode(request()->isDefault);
+        }
         $images = request()->file('productImages');
         foreach ($images as $key => $image) {
             $name = $image->storeAs(null, Str::uuid()->toString().'.'.$image->getClientOriginalExtension(), 'productImages');
-            ProductImages::query()->create(
+            ProductImages::create(
                 [
                 'name' => $name,
                 'product_id' => $id,
+                'isDefault' => $key == $isDefault->id,
                 ]
             );
+        }
+        return redirect()->route('product.show', $id);
+    }
+
+    public function update(string $id)
+    {
+        $isDefault = json_decode(request()->isDefault);
+        if(gettype($isDefault) == 'integer') {
+            $defaultImage = ProductImages::query()->where('product_id', '=', $id)->where('isDefault', '=', '1')->first();
+            if($defaultImage) {
+                $defaultImage->isDefault = false;
+                $defaultImage->save();
+            }
+            $newDefaultImage = ProductImages::query()->where('id', '=', $isDefault)->first();
+            $newDefaultImage->isDefault = true;
+            $newDefaultImage->save();
+            $imageKey = "";
+        }elseif(gettype($isDefault) == 'object') {
+            $defaultImage = ProductImages::query()->where('product_id', '=', $id)->where('isDefault', '=', '1')->first();
+            $defaultImage->isDefault = false;
+            $defaultImage->save();
+            $imageKey = $isDefault->id;
+        }
+        $images = request()->file('productImages');
+        if($images) {
+            foreach ($images as $key => $image) {
+                $name = $image->storeAs(null, Str::uuid()->toString().'.'.$image->getClientOriginalExtension(), 'productImages');
+                ProductImages::create(
+                    [
+                    'name' => $name,
+                    'product_id' => $id,
+                    'isDefault' => $key == $imageKey,
+                    ]
+                );
+            }
         }
         return redirect()->route('product.show', $id);
     }
