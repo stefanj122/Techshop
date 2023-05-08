@@ -7,6 +7,7 @@
             <div class="col-lg-4 product-images">
                 <img class="mx-2 img-thumbnail" src="{{ asset('storage/product/images/' . $image->name) }}" width="400px")>
                 <input type="radio" class="isdefault-btn" name="isDefault-radio"value="{{ $image->id }}"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Set default image"
                     @if ($image->isDefault == true) checked @endif>
                 <form method="post" action="{{ route('product.images.delete', $image->id) }}">
                     @csrf

@@ -73,6 +73,7 @@ import axios from "axios";
             select(".toggle-right-btn").classList.toggle("bi-caret-right-fill");
         });
     }
+
     const alertNode = select(".alert");
     if (alertNode) {
         on(
@@ -85,6 +86,7 @@ import axios from "axios";
             true
         );
     }
+
     const imageInput = document.getElementById("avatar");
     function loadFile(e) {
         const image = document.getElementById("output");
@@ -108,8 +110,11 @@ import axios from "axios";
             imageTag.className = "mx-2 img-thumbnail";
             input.classList.add("isdefault-btn");
             input.type = "radio";
-            // input.name = `isDefaultRadio`;
             input.id = "default";
+            new bootstrap.Tooltip(input, {
+                placement: "top",
+                title: "Set default image",
+            });
             input.addEventListener("click", (e) => {
                 const allInputs =
                     document.getElementsByClassName("isdefault-btn");
