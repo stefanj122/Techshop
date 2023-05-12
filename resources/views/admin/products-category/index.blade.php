@@ -1,9 +1,9 @@
 @extends('admin_base')
 @section('content')
     <div class="container text-center">
-        <div class="row row-cols-2">
+        <div class="row">
             @foreach ($categories as $category)
-                <div class="col">
+                <div class="col-lg-4">
                     <div class="card">
                         <a href="{{ route('productCategory.show', $category->id) }}">
                             <div class="card-body">

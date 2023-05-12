@@ -1,24 +1,25 @@
 @extends('admin_base')
+
 @section('content')
     <div class="card text-center mx-auto" style="width: 70%">
         <div class="card-header">
-            Product
+            @if ($product->category)
+                <a class="text-muted" href="{{ route('product.index', ['category' => $product->category->id]) }}">
+                    {{ $product->category->name }}
+                </a>
+            @else
+                No category
+            @endif
         </div>
+
         <div id="carouselExampleFade" class="carousel slide carousel-fade w-50 mx-auto" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     @foreach ($product->productImages as $image)
-                        @if ($loop->first)
-                            <div class="carousel-item active">
-                                <img src="{{ asset('storage/product/images/' . $image->name) }}" class="d-block w-100 "
-                                    alt="...">
-                            </div>
-                        @else
-                            <div class="carousel-item">
-                                <img src="{{ asset('storage/product/images/' . $image->name) }}" class="d-block w-100 "
-                                    alt="...">
-                            </div>
-                        @endif
+                        <div class="carousel-item @if ($image->isDefault) active @endif">
+                            <img src="{{ asset('storage/product/images/' . $image->name) }}" class="d-block w-100"
+                                alt="...">
+                        </div>
                     @endforeach
                 </a>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade"
@@ -33,6 +34,7 @@
                 </button>
             </div>
         </div>
+
         <div class="card-body">
             <h5 class="card-title">{{ $product->name }}</h5>
             <p class="card-text">{{ $product->description }}</p>
@@ -44,13 +46,11 @@
     </div>
     <div class="d-flex text-center justify-content-center">
         <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary m-2">Edit product</a>
-        <form method="POST" action="{{ route('product.delete', $product->id) }}">
-            @csrf
-            @method('DELETE')
-            <button href="{{ route('product.delete', $product->id) }}" class="btn btn-danger m-2">Delete
-                product</button>
-        </form>
+        <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleConfirmModal">
+            Delete product
+        </button>
     </div>
+
     <!-- Modal -->
     <div class="modal fade w-100" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered"style="min-width:70%">
@@ -63,17 +63,10 @@
                     <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                         <div class="carousel-inner">
                             @foreach ($product->productImages as $image)
-                                @if ($loop->first)
-                                    <div class="carousel-item active">
-                                        <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                            class="d-block mx-auto w-100 modal-img" alt="...">
-                                    </div>
-                                @else
-                                    <div class="carousel-item">
-                                        <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                            class="d-block mx-auto w-100 modal-img" alt="...">
-                                    </div>
-                                @endif
+                                <div class="carousel-item @if ($image->isDefault == true) active @endif">
+                                    <img src="{{ asset('storage/product/images/' . $image->name) }}"
+                                        class="d-block mx-auto w-100 modal-img" alt="...">
+                                </div>
                             @endforeach
                             <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel"
                                 data-bs-slide="prev">
@@ -87,6 +80,30 @@
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm modal -->
+    <div class="modal fade" id="exampleConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    Are you sure you want to delete this product?
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form method="POST" action="{{ route('product.delete', $product->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button href="{{ route('product.delete', $product->id) }}" class="btn btn-danger m-2">Delete
+                            product</button>
+                    </form>
                 </div>
             </div>
         </div>

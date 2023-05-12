@@ -1,7 +1,8 @@
 @extends('admin_base')
 
 @section('content')
-    <form class="form-control" method="POST" action="{{ route('product.update', $product->id) }}">
+    <form enctype="multipart/form-data" class="form-control" method="POST"
+        action="{{ route('product.update', $product->id) }}">
         @csrf
         @method('PUT')
         <label class="form-label">Name</label>
@@ -9,6 +10,7 @@
         @error('name')
             <div class="alert mt-2 alert-danger text-center alert-dismissible fade show">{{ $message }}</div>
         @enderror
+
         <label class="form-label">Description</label>
         <textarea class="form-control" name="description">{{ $product->description }}</textarea>
         @error('description')
@@ -16,38 +18,38 @@
         @enderror
 
         <label class="form-label">Price</label>
-        <input value="{{ $product->price }}" class="form-control" name="price" />
+        <div class="input-group mb-3">
+            <span class="input-group-text">KM</span>
+            <input type="number" step="0.1" value="{{ $product->price }}" class="form-control" name="price" />
+        </div>
         @error('price')
             <div class="alert mt-2 alert-dismissible fade show alert-danger text-center">{{ $message }}</div>
         @enderror
+
         <label class="form-label">Category</label>
-        @if ($product->category)
-            <select class="form-select" name="category_id" aria-label="Default select example">
-                <option value="{{ $product->category->id }}" selected>{{ $product->category->name }}</option>
-                @foreach ($categories as $category)
-                    @if ($category->id !== $product->category->id)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endif
-                @endforeach
-            </select>
-            @error('category_id')
-                <div class="alert mt-2 alert-danger text-center alert-dismissible fade show">{{ $message }}</div>
-            @enderror
-        @else
-            <select class="form-select" name="category_id" aria-label="Default select example">
-                <option value="0" selected>Select category</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-                @error('category_id')
-                    <div class="alert alert-dismissible fade show mt-2 alert-danger text-center">{{ $message }}</div>
-                @enderror
-        @endif
+        <select class="form-select" name="category_id" aria-label="Default select example">
+            <option disabled selected>Select category</option>
+            @foreach ($categories as $category)
+                <option value="{{ $category->id }}" @if ($product->category && $category->id == $product->category->id) selected @endif>
+                    {{ $category->name }}</option>
+            @endforeach
+        </select>
+        @error('category_id')
+            <div class="alert alert-dismissible fade show mt-2 alert-danger text-center">{{ $message }}</div>
+        @enderror
+
+        @include('admin.product.images.edit')
+
         <div class=" text-center">
-            <input class="btn btn-primary mt-2" type="submit" value="Update" />
-            <a class="btn btn-success mt-2" href="{{ route('product.images.edit', $product->id) }}">Change images</a>
+            <input class="btn btn-primary my-2" type="submit" value="Update" />
+            <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#exampleConfirmModal">
+                Delete selected images
+            </button>
+            <a class="my-2 btn btn-secondary" href="{{ route('product.show', $product->id) }}">Back</a>
         </div>
     </form>
+
+    @stack('test')
 @endsection
 
 @section('sidebar')

@@ -1,89 +1,96 @@
 <?php
+
 namespace App\Services\Admin;
 
-
 use App\Models\Product\Product;
+use App\Models\Product\ProductImages;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
-use App\Models\Product\ProductImages;
 
-class ProductImagesService
-{
-
-    public function upload(string $id): View|Factory
-    {
+class ProductImagesService {
+    public function upload(string $id): View|Factory {
         return view('admin.product.images.upload', ['id' => $id]);
     }
 
-    public function edit(string $id): View|Factory
-    {
-        $product = Product::findOrFail($id);
+    public function edit(string $id): View|Factory {
+        $product = Product::query()->findOrFail($id);
+
         return view('admin.product.images.edit', ['product' => $product]);
     }
 
-    public function store(string $id): RedirectResponse
-    {
-        if(!request()->isDefault) {
+    public function store(string $id): RedirectResponse {
+        if (!request()->isDefault) {
             $isDefault = json_decode('{"id":0}');
-        }else{
+        } else {
             $isDefault = json_decode(request()->isDefault);
         }
         $images = request()->file('productImages');
         foreach ($images as $key => $image) {
             $name = $image->storeAs(null, Str::uuid()->toString().'.'.$image->getClientOriginalExtension(), 'productImages');
-            ProductImages::create(
+            ProductImages::query()->create(
                 [
-                'name' => $name,
-                'product_id' => $id,
-                'isDefault' => $key == $isDefault->id,
+                    'name' => $name,
+                    'product_id' => $id,
+                    'isDefault' => $key == $isDefault->id,
                 ]
             );
         }
+
         return redirect()->route('product.show', $id);
     }
 
-    public function update(string $id): RedirectResponse
-    {
+    public function update(string $id): RedirectResponse {
         $isDefault = json_decode(request()->isDefault);
-        if(gettype($isDefault) == 'integer') {
-            $defaultImage = ProductImages::query()->where('product_id', '=', $id)->where('isDefault', '=', '1')->first();
-            if($defaultImage) {
+        if ('integer' == gettype($isDefault)) {
+            $defaultImage = ProductImages::query()->where('product_id', $id)->where('isDefault', '1')->first();
+            if ($defaultImage) {
                 $defaultImage->isDefault = false;
                 $defaultImage->save();
             }
-            $newDefaultImage = ProductImages::query()->where('id', '=', $isDefault)->first();
+            $newDefaultImage = ProductImages::query()->where('id', $isDefault)->first();
             $newDefaultImage->isDefault = true;
             $newDefaultImage->save();
-            $imageKey = "";
-        }elseif(gettype($isDefault) == 'object') {
-            $defaultImage = ProductImages::query()->where('product_id', '=', $id)->where('isDefault', '=', '1')->first();
+            $imageKey = '';
+        } elseif ('object' == gettype($isDefault)) {
+            $defaultImage = ProductImages::query()->where('product_id', $id)->where('isDefault', '1')->first();
             $defaultImage->isDefault = false;
             $defaultImage->save();
             $imageKey = $isDefault->id;
+        } else {
+            $imageKey = '';
         }
         $images = request()->file('productImages');
-        if($images) {
+        if ($images) {
             foreach ($images as $key => $image) {
                 $name = $image->storeAs(null, Str::uuid()->toString().'.'.$image->getClientOriginalExtension(), 'productImages');
-                ProductImages::create(
+                ProductImages::query()->create(
                     [
-                    'name' => $name,
-                    'product_id' => $id,
-                    'isDefault' => $key == $imageKey,
+                        'name' => $name,
+                        'product_id' => $id,
+                        'isDefault' => $key == $imageKey,
                     ]
                 );
             }
         }
+
         return redirect()->route('product.show', $id);
     }
 
-    public function delete(string $id): RedirectResponse
-    {
-        $image = ProductImages::query()->findOrFail($id);
-        $image->delete();
+    public function delete(string $id): RedirectResponse {
+        $deleteImages = request()->deletedImages;
+        if (!$deleteImages) {
+            return back()->withErrors(['error' => 'No images slected to be deleted.']);
+        }
+        foreach ($deleteImages as $key => $status) {
+            if ($status) {
+                $image = ProductImages::query()->where('id', $key)->where('isDefault', false)->first();
+                unlink(storage_path('app/public/product/images/'.$image->name));
+                $image->delete();
+            }
+        }
 
-        return back()->with('status', 'Image deleted successfully');
+        return redirect()->route('product.show', $id)->with('status', 'Images successfully deleted.');
     }
 }

@@ -27,8 +27,8 @@
                             @foreach ($product->productImages as $image)
                                 @if ($image->isDefault == true)
                                     <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                        class="card-img-top img-thumbnail w-50 mx-auto mt-2" alt="..."
-                                        style="max-height: 150px" id="index-images">
+                                        class="home-img w-50 mx-auto mt-2" alt="..." style="max-height: 150px"
+                                        id="index-images">
                                 @endif
                             @endforeach
                             <div class="card-body">

@@ -113,9 +113,13 @@
     color: red;
 }
 
+.create-img {
+    height: 200px !important;
+    object-fit: contain;
+}
 .product-images .isdefault-btn {
     position: absolute;
-    top: 5%;
+    top: 10%;
     left: 10%;
     text-align: center;
     cursor: pointer;
@@ -124,4 +128,16 @@
     background: transparent;
     border: none;
     color: red;
+}
+
+.home-img {
+    object-fit: cover;
+}
+
+.product-images .checkbox-img {
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    text-align: center;
+    cursor: pointer;
 }

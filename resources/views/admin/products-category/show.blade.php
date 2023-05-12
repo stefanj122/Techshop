@@ -14,11 +14,31 @@
     </div>
     <div class="text-center">
         <a href="{{ route('productCategory.edit', $category->id) }}" class="btn btn-primary m-2">Edit category</a>
-        <form method="POST" action="{{ route('productCategory.delete', $category->id) }}">
-            @csrf
-            @method('DELETE')
-            <button class="btn btn-danger m-2">Delete category</button>
-        </form>
+        <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleConfirmModal">
+            Delete category
+        </button>
+    </div>
+    <!-- Confirm modal -->
+    <div class="modal fade" id="exampleConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    Are you sure you want to delete this category?
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form method="POST" action="{{ route('productCategory.delete', $category->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger m-2">Delete category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 

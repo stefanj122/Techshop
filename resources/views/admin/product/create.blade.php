@@ -1,7 +1,7 @@
 @extends('admin_base')
 
 @section('content')
-    <form class="form-control" method="POST" action="{{ route('product.store') }}">
+    <form enctype="multipart/form-data" class="form-control" method="POST" action="{{ route('product.store') }}">
         @csrf
         <div class="form-floating mb-3">
             <input value="{{ old('name') }}" class="form-control" name="name" placeholder="Name" />
@@ -10,6 +10,7 @@
         @error('name')
             <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
+
         <div class="form-floating mb-3">
             <textarea id="description" class="form-control" placeholder="description" name="description">{{ old('description') }}</textarea>
             <label for="description">Description</label>
@@ -17,6 +18,7 @@
         @error('description')
             <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
+
         <div class="input-group mb-3">
             <span class="input-group-text">KM</span>
             <div class="form-floating">
@@ -28,17 +30,8 @@
         @error('price')
             <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
+
         <div class="form-floating mb-3">
-            {{-- <select id="categories" class="form-select" name="categoryId" aria-label="Default select example"> --}}
-            {{--     <option value="0" selected>Select category</option> --}}
-            {{--     @foreach ($categories as $category) --}}
-            {{--         @if ($category->id == old('categoryId')) --}}
-            {{--             <option selected value="{{ $category->id }}">{{ $category->name }}</option> --}}
-            {{--         @else --}}
-            {{--             <option value="{{ $category->id }}">{{ $category->name }}</option> --}}
-            {{--         @endif --}}
-            {{--     @endforeach --}}
-            {{-- </select> --}}
             <input class="form-control" type="text" autocomplete="off" placeholder="Category" id="input-category">
             <label for="categories" class="form-label">Category</label>
         </div>
@@ -47,8 +40,12 @@
         @error('categoryId')
             <div class="alert alert-danger alert-dismissible fade show">{{ $message }}</div>
         @enderror
+
+        @include('admin.product.images.upload')
+
         <div class=" text-center">
-            <input class="mt-4 btn btn-primary" type="submit" value="Next" />
+            <input class="my-2 btn btn-primary" type="submit" value="Save" />
+            <a href="{{ route('product.index') }}" class="btn btn-secondary my-2">Back</a>
         </div>
     </form>
 @endsection

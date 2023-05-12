@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductImagesController;
-use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\SecurityController;
+use App\Http\Controllers\HomePageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,8 +25,8 @@ Route::middleware('auth')->get(
 )->name('home');
 
 Route::group(
-    ['middleware'=>'auth'], function () {
-
+    ['middleware' => 'auth'],
+    function () {
         Route::controller(ProductCategoryController::class)->group(
             function () {
                 Route::prefix('/admin/products-category')->group(

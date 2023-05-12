@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Hash;
 
 class SecurityController extends Controller
 {
-
     public function login(): View|Factory
     {
         return view('auth.login');
@@ -52,9 +51,9 @@ class SecurityController extends Controller
         'password' => request()->password,
         ];
         request()->flashExcept('password');
-        if(Auth::attempt($credentials, request()->remember)) {
+        if (Auth::attempt($credentials, request()->remember)) {
             return redirect()->route('home')->withInput();
-        }else{
+        } else {
             return back()->withErrors(['login'=>"Incorrect username or password"]);
         };
     }

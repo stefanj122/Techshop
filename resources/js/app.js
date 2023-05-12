@@ -103,11 +103,10 @@ import axios from "axios";
             const imageTag = document.createElement("img");
             const div = document.createElement("div");
             const input = document.createElement("input");
-            div.classList.add("col-lg-4");
-            div.classList.add("product-images");
+            div.className = "col-lg-4 product-images";
             imageTag.src = URL.createObjectURL(image);
-            imageTag.width = 400;
-            imageTag.className = "mx-2 img-thumbnail";
+            // imageTag.width = 400;
+            imageTag.className = "m-2 img-thumbnail w-100 create-img";
             input.classList.add("isdefault-btn");
             input.type = "radio";
             input.id = "default";
@@ -216,6 +215,20 @@ import axios from "axios";
                 removeElements();
                 fetchCategories(this.value);
             }, 500);
+        });
+    }
+
+    const deleteCheckbox = document.querySelectorAll(".checkbox-img");
+    const formDelete = document.querySelector("#form-deleted");
+    if (deleteCheckbox) {
+        deleteCheckbox.forEach((item) => {
+            item.addEventListener("click", function () {
+                const deletedImages = document.createElement("input");
+                deletedImages.type = "hidden";
+                deletedImages.name = `deletedImages[${item.id}]`;
+                deletedImages.value = item.checked;
+                formDelete.appendChild(deletedImages);
+            });
         });
     }
 

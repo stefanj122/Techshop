@@ -7,63 +7,86 @@ use App\Models\Product\Product;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
-class ProductService
-{
-    public function index(): View|Factory
-    {
+class ProductService {
+    public function index(): View|Factory {
         $products = Product::query()
-            ->where('name', 'like', '%'.request()->search.'%');
-        $products = request()->lowPrice ? $products->where('price', '>', request()->lowPrice): $products;
-        $products = request()->highPrice ? $products->where('price', '<', request()->highPrice): $products;
+            ->where('name', 'like', '%'.request()->search.'%')
+        ;
+        $products = request()->lowPrice ? $products->where('price', '>', request()->lowPrice) : $products;
+        $products = request()->highPrice ? $products->where('price', '<', request()->highPrice) : $products;
         $products = request()->category ? $products->where('category_id', '=', request()->category) : $products;
-        if(request()->sortBy) {
+        if (request()->sortBy) {
             $sortBy = explode(':', request()->sortBy);
             $products = $products->orderBy($sortBy[0], $sortBy[1]);
         }
-        $products= $products->paginate(request()->perPage);
+        $products = $products->with('productImages', function ($query) {
+            $query->where('isDefault', true);
+        });
+        $products = $products->paginate(request()->perPage);
         $categories = Category::query()->get();
+
         return view('admin.product.index', ['products' => $products, 'categories' => $categories]);
     }
 
-    public function store(): RedirectResponse
-    {
-            request()->validate(
-                ['name' => 'required|string|min:2',
+    public function store(): RedirectResponse|Product {
+        $validator = Validator::make(
+            request()->all(),
+            [
+                'name' => 'required|string|min:2',
                 'description' => 'string|nullable|max:2000',
                 'price' => 'required|numeric',
                 'categoryId' => 'integer|nullable',
-                 ]
-            );
-        $product = new Product;
+                'productImages.*' => 'required|mimes:jpg,svg,png,gif,webp',
+            ]
+        );
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->messages()->messages());
+        }
+        /* request()->validate(
+            [
+                'name' => 'required|string|min:2',
+                'description' => 'string|nullable|max:2000',
+                'price' => 'required|numeric',
+                'categoryId' => 'integer|nullable',
+                'productImages.*' => 'required|mimes:jpg,svg,png,gif,webp',
+            ]
+        ); */
+        $product = new Product();
         $product->name = request()->name;
         $product->description = request()->description;
         $product->price = request()->price;
-        $category = Category::query()->where('id', request()->categoryId)->first();
-        $product->category()->associate($category);
+        $product->category_id = request()->categoryId;
         $product->save();
 
-        return redirect()->route('product.images.upload', $product->id);
+        return $product;
     }
 
-    public function show(string $id): RedirectResponse|View|Factory
-    {
+    public function show(string $id): RedirectResponse|View|Factory {
         $product = Product::query()->where('id', $id)->first();
-        if(!$product) {
+        if (!$product) {
             return redirect()->route('product.index');
         }
+
         return view('admin.product.show', ['product' => $product]);
     }
 
-    public function update(string $id): RedirectResponse
-    {
-        request()->validate(
+    public function update(string $id): RedirectResponse {
+        $validator = Validator::make(
+            request()->all(),
             [
-            'name' => 'required|min:2',
-            'description' => 'nullable|max:2000',
-            'price' => 'numeric|required',
+                'name' => 'required|string|min:2',
+                'description' => 'string|nullable|max:2000',
+                'price' => 'required|numeric',
+                'categoryId' => 'integer|nullable',
+                'productImages.*' => 'required|mimes:jpg,svg,png,gif,webp',
             ]
         );
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->messages()->messages());
+        }
         $product = Product::query()->where('id', $id)->first();
         $product->update(
             [
@@ -77,26 +100,26 @@ class ProductService
         return redirect()->route('product.show', $id)->with('status', 'Succesfuly updated');
     }
 
-    public function delete(string $id): RedirectResponse
-    {
+    public function delete(string $id): RedirectResponse {
         $product = Product::query()->where('id', $id)->first();
         $product->delete();
+
         return redirect()->route('product.index')->with('status', 'Succesfuly deleted');
     }
 
-    public function edit(string $id): RedirectResponse|View|Factory
-    {
+    public function edit(string $id): RedirectResponse|View|Factory {
         $product = Product::query()->where('id', $id)->first();
-        if(!$product) {
+        if (!$product) {
             return redirect()->route('product.index');
         }
         $categories = Category::query()->get();
-        return view('admin.product.edit', ['product' => $product, 'categories'=>$categories]);
+
+        return view('admin.product.edit', ['product' => $product, 'categories' => $categories]);
     }
 
-    public function create(): View|Factory
-    {
+    public function create(): View|Factory {
         $categories = Category::query()->get();
+
         return view('admin.product.create', ['categories' => $categories]);
     }
 }

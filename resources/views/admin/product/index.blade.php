@@ -1,18 +1,16 @@
 @extends('admin_base')
 @section('content')
     <div class="container text-center" id=test>
-        <div class="row row-cols-2">
+        <div class="row">
             @foreach ($products as $product)
-                <div class="col mt-4">
+                <div class="col-lg-6 mt-4">
                     <a href="{{ route('product.show', $product->id) }}">
                         <div class="card h-100">
-                            @foreach ($product->productImages as $image)
-                                @if ($image->isDefault == true)
-                                    <img src="{{ asset('storage/product/images/' . $image->name) }}"
-                                        class="card-img-top  w-75 mx-auto mt-2 index-images" alt="..."
-                                        style="max-height: 200px">
-                                @endif
-                            @endforeach
+                            @if (count($product->productImages) === 1)
+                                <img src="{{ asset('storage/product/images/' . $product->productImages[0]->name) }}"
+                                    class="card-img-top  w-75 mx-auto mt-2 index-images" alt="..."
+                                    style="max-height: 200px">
+                            @endif
                             <div class="card-body">
                                 <h3 class="card-title">{{ $product->name }}</h3>
                                 @if ($product->category)

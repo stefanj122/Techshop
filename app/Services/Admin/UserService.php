@@ -9,10 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-
 class UserService
 {
-
     public function show(string $id): View|Factory
     {
         $user = User::query()->findOrFail($id);
