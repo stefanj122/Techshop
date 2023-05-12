@@ -45,7 +45,7 @@
 </div>
 <input type="hidden" id="isDefault" name="isDefault">
 
-@push('test')
+@push('delete-input')
     <!-- Confirm modal -->
     <div class="modal fade" id="exampleConfirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -59,11 +59,11 @@
                 </div>
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <form method="POST" action="{{ route('product.images.delete', $product->id) }}" id="form-deleted">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-danger m-2">Delete images</button>
-                    </form>
+                    {{-- <form method="POST" action="{{ route('product.images.delete', $product->id) }}" id="form-deleted"> --}}
+                    {{--     @csrf --}}
+                    {{--     @method('DELETE') --}}
+                    <button class="btn btn-danger m-2">Delete images</button>
+                    {{-- </form> --}}
                 </div>
             </div>
         </div>

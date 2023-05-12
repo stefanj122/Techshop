@@ -74,6 +74,10 @@ class ProductImagesService {
                 );
             }
         }
+        // dd(request());
+        if (request()->deletedImages) {
+            $this->delete($id);
+        }
 
         return redirect()->route('product.show', $id);
     }

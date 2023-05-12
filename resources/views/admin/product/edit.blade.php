@@ -1,7 +1,7 @@
 @extends('admin_base')
 
 @section('content')
-    <form enctype="multipart/form-data" class="form-control" method="POST"
+    <form id="form-deleted" enctype="multipart/form-data" class="form-control" method="POST"
         action="{{ route('product.update', $product->id) }}">
         @csrf
         @method('PUT')
@@ -42,14 +42,13 @@
 
         <div class=" text-center">
             <input class="btn btn-primary my-2" type="submit" value="Update" />
-            <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#exampleConfirmModal">
-                Delete selected images
-            </button>
+            {{-- <button type="button" class="btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#exampleConfirmModal"> --}}
+            {{--     Delete selected images --}}
+            {{-- </button> --}}
             <a class="my-2 btn btn-secondary" href="{{ route('product.show', $product->id) }}">Back</a>
         </div>
+        @stack('delete-input')
     </form>
-
-    @stack('test')
 @endsection
 
 @section('sidebar')
